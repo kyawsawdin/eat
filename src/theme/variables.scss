@@ -230,3 +230,38 @@
     --color: white;
   }
 }
+
+.ion-color-facebook{
+  --ion-color-base: #4267b2;
+  --ion-color-base-rgb: 66,103,178;
+  --ion-color-contrast: #ffffff;
+  --ion-color-contrast-rgb: 255,255,255;
+  --ion-color-shade: #3a5b9d;
+  --ion-color-tint: #5576ba;
+}
+.ion-color-google{
+  --ion-color-base: #db4437;
+  --ion-color-base-rgb: 219,68,55;
+  --ion-color-contrast: #ffffff;
+  --ion-color-contrast-rgb: 255,255,255;
+  --ion-color-shade: #c13c30;
+  --ion-color-tint: #df574b;
+}
+
+:root {
+  --ion-color-social: #2798fb;
+  --ion-color-social-rgb: 39,152,251;
+  --ion-color-social-contrast: #000000;
+  --ion-color-social-contrast-rgb: 0,0,0;
+  --ion-color-social-shade: #2286dd;
+  --ion-color-social-tint: #3da2fb;
+}
+
+.ion-color-social {
+  --ion-color-base: var(--ion-color-social);
+  --ion-color-base-rgb: var(--ion-color-social-rgb);
+  --ion-color-contrast: var(--ion-color-social-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-social-contrast-rgb);
+  --ion-color-shade: var(--ion-color-social-shade);
+  --ion-color-tint: var(--ion-color-social-tint);
+}

@@ -1,0 +1,78 @@
+<ion-header mode="ios">
+  <ion-toolbar mode="md">
+	  <ion-buttons slot="start" (click)="close()">
+      <ion-back-button defaultHref="{{'/'+path}}"></ion-back-button>
+    </ion-buttons>
+    <ion-title *ngIf="product.name" [innerHTML]="product.name"></ion-title>
+    <ion-buttons slot="end">
+      <ion-button class="total-count-button" (click)="close()">
+          <ion-icon slot="icon-only" name="basket-outline"></ion-icon>
+          <ion-badge *ngIf="getTotalCount() != 0"color="danger" class="total-count"><span class="count-text">{{getTotalCount()}}</span></ion-badge>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="spinner" *ngIf="product.availableVariations == null || !product.availableVariations.length">{{"No Products!" | translate}}</div>
+
+  <div class="product-grid2" *ngIf="!gridView">
+      <ion-list *ngIf="product.availableVariations">
+        <ion-grid class="ion-no-padding">
+          <ion-row>
+          <ion-col *ngFor="let item of product.availableVariations" class="product" size="12" size-sm="6" size-md="6">
+            <ion-card mode="{{values.effect}}" button="true" (click)="detail()">
+              <ion-grid>
+                <ion-row>
+                <ion-col size="3" style="line-height: 0;">
+                  <img *ngIf="item.image && item.image.src" src="{{item.image.src}}">
+                  <ion-button color="success" class="offer" *ngIf="((item.display_regular_price - item.display_price) /item.display_regular_price*100) >= 1">{{(item.display_regular_price - item.display_price) /item.display_regular_price*100 | number : '1.0-0'}}%</ion-button>
+                </ion-col>
+                <ion-col>
+                <ion-card-header>
+                  <ion-card-title>
+                  <ion-label><h2 [innerHTML]="getTitle(item).toUpperCase()"></h2>
+                  <p [innerHTML]="item.description" (click)="detail()"></p>
+                  <p *ngIf="item.is_in_stock" class="item-status"><span class="instock">{{"INSTOCK" | translate}}</span></p>
+                  <p *ngIf="!item.is_in_stock" class="item-status"><span class="outofstock">{{"OUTOFSTOCK" | translate}}</span></p>
+                  </ion-label>
+                  </ion-card-title>
+                  <ion-card-subtitle>{{item.display_price | currency:values.currency:'symbol':'1.'+values.priceDecimal+'-'+values.priceDecimal}}<span class="regular_price" *ngIf="item.display_regular_price && item.display_regular_price > item.display_price">{{item.display_regular_price | currency:values.currency:'symbol':'1.'+values.priceDecimal+'-'+values.priceDecimal}}</span></ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content>
+                      <div class="add-button-block">
+                      <div *ngIf="hasItemInOrder(item)">
+                        <ion-button mode="ios" class="remove-button" fill="{{values.button.fill}}" color="{{values.button.color}}"  size="small" slot="end" (click)="removeProduct(item); $event.stopPropagation()">
+                        <ion-icon slot="icon-only" name="remove-circle"></ion-icon>
+                      </ion-button>
+                        <ion-button class="button-count" fill="clear" color="{{values.button.color}}" size="small" slot="end">
+                        <ion-text>{{getCount(item)}}</ion-text>
+                      </ion-button>
+                        <ion-button mode="ios" fill="{{values.button.fill}}" color="{{values.button.color}}" size="small" (click)="addProduct(item); $event.stopPropagation()">
+                        <ion-icon slot="icon-only" name="add-circle"></ion-icon>
+                      </ion-button>
+                      </div>
+                      <div *ngIf="!hasItemInOrder(item)">
+                        <ion-button mode="ios" fill="{{values.button.fill}}" color="{{values.button.color}}" size="small" (click)="addProduct(item); $event.stopPropagation()">
+                        {{"ADD" | translate}}
+                      </ion-button>
+                      </div>
+                    </div>
+                </ion-card-content>
+              </ion-col>              
+                  </ion-row>
+                    </ion-grid>
+            </ion-card>
+        </ion-col>
+        </ion-row>
+        </ion-grid>
+      </ion-list>
+    </div>
+
+</ion-content>
+<ion-footer>
+    <ion-toolbar>
+    <ion-button expand="full" color="{{settings.theme.button}}" (click)="close()">{{"DONE" | translate}}</ion-button>
+    </ion-toolbar>
+</ion-footer>

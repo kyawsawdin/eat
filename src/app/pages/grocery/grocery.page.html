@@ -1,0 +1,77 @@
+<ion-header mode="ios">
+  <ion-toolbar>
+    <ion-title>Grocery</ion-title>
+	<ion-buttons slot="end">
+    <ion-button routerDirection="forward" [routerLink]="['/search']">
+      <ion-icon color="medium" slot="icon-only" name="search-outline"></ion-icon>
+    </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-fab *ngIf="values.getTotalCount() != 0" vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button mode="ios" translucent="true" color="{{settings.theme.button}}" (click)="cart()">
+      <ion-icon name="basket"></ion-icon>
+      <ion-badge color="danger" class="fab-count"><span class="count-text">{{values.getTotalCount()}}</span></ion-badge>
+    </ion-fab-button>
+  </ion-fab>
+
+	<div class="product-grid2" *ngIf="products">
+      <ion-list>
+        <ion-grid class="ion-no-padding">
+          <ion-row>
+          <ion-col *ngFor="let item of products" class="product" size="12" size-sm="6" size-md="4">
+            <ion-card mode="{{values.effect}}" button="true" (click)="detail(item)">
+              <ion-grid>
+                <ion-row>
+                <ion-col size="3" style="line-height: 0;">
+                  <img *ngIf="item.images[0] && item.images[0].src" src="{{item.images[0].src}}">
+                  <ion-button color="success" class="offer" *ngIf="((item.regular_price - item.price) /item.regular_price*100) >= 1">{{(item.regular_price - item.price) /item.regular_price*100 | number : '1.0-0'}}%</ion-button>
+                </ion-col>
+                <ion-col>
+                <ion-card-header>
+                  <ion-card-title>
+                  <ion-label><h2 class="product-name" [innerHTML]="item.name" (click)="detail(item)"></h2>
+                    <p class="product-description" [innerHTML]="item.description"></p>
+                  </ion-label>
+                  </ion-card-title>
+                  <ion-card-subtitle>{{item.price | currency:values.currency:'symbol':'1.'+values.priceDecimal+'-'+values.priceDecimal}}<span class="regular_price" *ngIf="item.sale_price">{{item.regular_price | currency:values.currency:'symbol':'1.'+values.priceDecimal+'-'+values.priceDecimal}}</span></ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content>
+                        <div class="add-button-block">
+                      <div *ngIf="values.hasItemInOrder(item)">
+                        <ion-button mode="ios" fill="{{values.button.fill}}" color="{{values.button.color}}"  size="small" slot="end" (click)="removeProduct(item); $event.stopPropagation()">
+                        <ion-icon slot="icon-only" name="remove"></ion-icon>
+                      </ion-button>
+                        <ion-button class="button-count" fill="clear" color="{{values.button.color}}" size="small" slot="end">
+                        <ion-text>{{values.getCount(item)}}</ion-text>
+                      </ion-button>
+                        <ion-button mode="ios" fill="{{values.button.fill}}" color="{{values.button.color}}" size="small" (click)="addProduct(item); $event.stopPropagation()">
+                        <ion-icon slot="icon-only" name="add"></ion-icon>
+                      </ion-button>
+                      </div>
+                      <div *ngIf="!values.hasItemInOrder(item)">
+                        <ion-button mode="ios" fill="{{values.button.fill}}" color="{{values.button.color}}" size="small" (click)="addProduct(item); $event.stopPropagation()">
+                         {{"ADD" | translate}}
+                      </ion-button>
+                      </div>
+                    </div>
+                </ion-card-content>
+              </ion-col>              
+                  </ion-row>
+                    </ion-grid>
+            </ion-card>
+        </ion-col>
+        </ion-row>
+        </ion-grid>
+      </ion-list>
+    </div>
+
+
+<div *ngIf="!products">
+	<app-product-skeleton count="20"></app-product-skeleton>
+</div>
+
+</ion-content>

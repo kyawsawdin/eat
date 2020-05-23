@@ -1,0 +1,116 @@
+<ion-header mode="ios">
+  <ion-toolbar mode="md">
+	<ion-buttons slot="start">
+      <ion-back-button defaultHref="{{'/'+path}}"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{"Order Summary" | translate}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+<ion-list *ngIf="order">
+
+  <ion-list-header>
+    <ion-label style="font-weight: 900;">{{order.id}} - <span style="text-transform: uppercase;">{{order.status}}</span></ion-label>
+  </ion-list-header>
+
+  <ion-list-header>
+    <ion-label>{{"Date" | translate}}</ion-label>
+  </ion-list-header>
+
+  <ion-item lines="full">
+    <ion-label text-wrap>
+      <p>{{order.date_created | date:'MMM d, y hh:mm a'}}</p>
+    </ion-label>
+  </ion-item>
+
+  <ion-list-header>
+    <ion-label>{{"Billing Address" | translate}}</ion-label>
+  </ion-list-header>
+
+  <ion-item lines="full">
+    <ion-label text-wrap>
+      <p>
+    <span>{{order.billing.first_name}}</span>&nbsp;<span>{{order.billing.last_name}}</span>&nbsp;<span>{{order.billing.company}}</span>&nbsp;<span>{{order.billing.address_1}}</span>&nbsp;<span>{{order.billing.address_2}}</span>&nbsp;<span>{{order.billing.city}}</span>
+    <span>{{order.billing.state}}</span>&nbsp;<span>{{order.billing.postcode}}</span>&nbsp;<span>{{order.billing.country}}</span>
+    &nbsp;<span>{{order.billing.email}}</span>&nbsp;<span>{{order.billing.phone}}</span>
+  </p>
+    </ion-label>
+  </ion-item>
+
+  
+  <div *ngIf="order.shipping?.first_name || order.shipping?.last_name">
+  <ion-list-header>
+    <ion-label>{{"Shipping Address" | translate}}</ion-label>
+  </ion-list-header>
+
+  <ion-item lines="full">
+    <ion-label text-wrap>
+      <p>
+    <span>{{order.shipping.first_name}}</span>&nbsp;<span>{{order.shipping.last_name}}</span>&nbsp;<span>{{order.shipping.company}}</span>&nbsp;<span>{{order.shipping.address_1}}</span>&nbsp;<span>{{order.shipping.address_2}}</span>&nbsp;<span>{{order.shipping.city}}</span>&nbsp;
+    <span>{{order.shipping.state}}</span>&nbsp;<span>{{order.shipping.postcode}}</span>&nbsp;<span>{{order.shipping.country}}</span>&nbsp;
+    <span>{{order.shipping.email}}</span>&nbsp;<span>{{order.shipping.phone}}</span>
+  </p>
+    </ion-label>
+  </ion-item>
+  </div>
+
+  <div *ngIf="order.shipping_lines && order.shipping_lines.length != 0">
+  <ion-list-header>
+    <ion-label>{{"Shipping Method" | translate}}</ion-label>
+  </ion-list-header>
+
+
+  <ion-item lines="full">
+    <ion-label text-wrap *ngFor="let item of order.shipping_lines | keys">
+    <p>{{item.value.method_title}}</p>
+    </ion-label>
+  </ion-item>
+  </div>
+
+  <ion-list-header>
+    <ion-label>{{"Payment Method" | translate}}</ion-label>
+  </ion-list-header>
+
+
+  <ion-item lines="full">
+    <ion-label text-wrap>
+    <p>{{order.payment_method_title}}</p>
+    </ion-label>
+  </ion-item>
+
+  <ion-list-header>
+    <ion-label>{{"Items" | translate}}</ion-label>
+  </ion-list-header>
+
+  <ion-item lines="full">
+    <ion-label class="ion-text-wrap">
+    <p *ngFor="let item of order.line_items">{{item.name}} <span *ngFor="let meta of item.meta_data">{{meta.value}}</span> x {{item.quantity}}
+      <span style="float: right">{{item.total | currency:values.currency:'symbol':'1.'+values.priceDecimal+'-'+values.priceDecimal}}</span>
+    </p>
+    </ion-label>
+  </ion-item>
+
+  <ion-list-header>
+    <ion-label>{{"Totals" | translate}}</ion-label>
+  </ion-list-header>
+
+  <ion-item lines="full">
+    <ion-label text-wrap>
+    <p>{{"Shipping" | translate}}<span style="float: right">{{order.shipping_total | currency:values.currency:'symbol':'1.'+values.priceDecimal+'-'+values.priceDecimal}}</span></p>
+    <p>{{"Discount" | translate}}<span style="float: right">{{order.discount_total | currency:values.currency:'symbol':'1.'+values.priceDecimal+'-'+values.priceDecimal}}</span></p>
+    <p>{{"Tax" | translate}}<span style="float: right">{{order.total_tax | currency:values.currency:'symbol':'1.'+values.priceDecimal+'-'+values.priceDecimal}}</span></p>
+    <ion-label class="grand-total">Total<span style="float: right">{{order.total | currency:values.currency:'symbol':'1.'+values.priceDecimal+'-'+values.priceDecimal}}</span></ion-label>
+  </ion-label>
+  </ion-item>
+  
+</ion-list>
+
+</ion-content>
+<ion-footer>
+    <ion-toolbar>
+    <ion-button expand="full" color="{{settings.theme.button}}" (click)="continue()">{{"Continue" | translate}}</ion-button>
+    </ion-toolbar>
+</ion-footer>
+

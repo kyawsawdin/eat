@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+  	<ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{"Locations" | translate}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="location-page">
+<div #map id="map" style="height: 40%;"></div>
+
+  <!-- <ion-searchbar [(ngModel)]="autocomplete.input" (ionInput)="UpdateSearchResults()" (ionClear)="ClearAutocomplete()"> -->
+  <ion-searchbar [(ngModel)]="userAddress" mode="ios" animated placeholder="{{'Enter your delivery address' | translate}}" (ionInput)="UpdateSearchResults()" (ionClear)="ClearAutocomplete()">
+  </ion-searchbar>
+
+  <ion-list [hidden]="autocompleteItems.length == 0">
+    <ion-item *ngFor="let item of autocompleteItems" tappable (click)="SelectSearchResult(item)">
+      {{ item.description }}
+    </ion-item>
+  </ion-list>
+
+  <div class="nav-buttons">
+    <ion-button expand="block" shape="round" mode="ios" color="tertiary" fill="clear" class="location_button" (click)="currentLoadUserMap()">
+      <ion-icon name="locate-outline"></ion-icon>
+      {{'Use Current Location' | translate}}
+    </ion-button>
+    <!-- <ion-button [disabled]="!isGetLatLng" expand="block" shape="round" mode="ios" fill="outline" color="tertiary" (click)="goToHomePage()">Start -->
+    <ion-button expand="block" shape="round" mode="ios" color="primary" (click)="goToHomePage()"> {{'Start
+      Shopping' | translate}}
+    </ion-button>
+  </div>
+
+ 
+
+</ion-content>

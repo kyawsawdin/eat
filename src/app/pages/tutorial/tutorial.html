@@ -1,0 +1,42 @@
+<ion-header mode="ios" no-border>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="end">
+      <ion-button color='primary' (click)="startApp()" [hidden]="!showSkip">Skip</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen="true">
+  <ion-slides style="height: 100%;" #slides (ionSlideWillChange)="onSlideChangeStart($event)" pager="true">
+    <ion-slide>
+      <img src="assets/image/tutorial/discount.png" class="slide-image" />
+      <h2 class="slide-title">
+        Grab Best Offers
+      </h2>
+      <p>
+        Don't miss deals of the day. We would like to send you awesome offers every day.
+      </p>
+    </ion-slide>
+
+    <ion-slide>
+      <img src="assets/image/tutorial/factory.png" class="slide-image" />
+      <h2 class="slide-title">Direct Factory Supply</h2>
+      <p>Most of the product are directly supplied from the factory</p>
+    </ion-slide>
+
+    <ion-slide>
+      <img src="assets/image/tutorial/products.png" class="slide-image" />
+      <h2 class="slide-title">Stay up to date products</h2>
+      <p>Get a notification for new products and updates.</p>
+    </ion-slide>
+
+    <ion-slide>
+      <img src="assets/image/tutorial/access_account.png" class="slide-image" />
+      <h2 class="slide-title">Ready to Go?</h2>
+      <ion-button fill="clear" (click)="startApp()">
+        Continue
+        <ion-icon slot="end" name="arrow-forward"></ion-icon>
+      </ion-button>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

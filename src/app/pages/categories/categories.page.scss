@@ -1,0 +1,11 @@
+ion-item {
+    --inner-padding-bottom: 8px;
+    --inner-padding-top: 8px;
+}
+ion-thumbnail {
+    width: 35px;
+    height: 35px;
+    img {
+        border-radius: 4px;
+    }
+}

@@ -1,0 +1,69 @@
+<ion-header mode="ios">
+  <ion-toolbar mode="md">
+    <ion-buttons slot="start" (click)="close()">
+      <ion-back-button defaultHref="{{'/home'}}"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{"Register" | translate}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen="true">
+
+<div class="login1">
+ 
+<ion-list>
+  <form [formGroup]="form">
+  
+    <ion-item lines="full">
+      <ion-label color="medium" position="stacked">{{"First Name" | translate}}</ion-label>
+      <ion-input required type="text" formControlName="first_name"></ion-input>
+    </ion-item>
+    <ion-item lines="full">
+      <ion-label color="medium" position="stacked">{{"Last Name" | translate}}</ion-label>
+      <ion-input required type="text" formControlName="last_name"></ion-input>
+    </ion-item>
+    <ion-item lines="full">
+      <ion-label color="medium" position="stacked">{{"Email" | translate}} (Username)</ion-label>
+      <ion-input required type="text" formControlName="email"></ion-input>
+    </ion-item>
+    <ion-item lines="full">
+      <ion-label color="medium" position="stacked">{{"Password" | translate}}</ion-label>
+      <ion-input required type="text" formControlName="password"></ion-input>
+    </ion-item>
+    <ion-item lines="full">
+      <ion-label color="medium" position="stacked">{{"Phone" | translate}}</ion-label>
+      <ion-input required type="text" formControlName="phone"></ion-input>
+    </ion-item>
+    <ion-item lines="full">
+      <ion-label color="medium" position="stacked">{{"Address 1" | translate}}</ion-label>
+      <ion-input required type="text" formControlName="address_1"></ion-input>
+    </ion-item>
+    <ion-item lines="full">
+      <ion-label color="medium" position="stacked">{{"Address 2" | translate}}</ion-label>
+      <ion-input type="text" formControlName="address_2"></ion-input>
+    </ion-item>
+    <ion-item lines="full">
+      <ion-label color="medium" position="stacked">{{"City" | translate}}</ion-label>
+      <ion-input required type="text" formControlName="city"></ion-input>
+    </ion-item>
+    <ion-item lines="full">
+      <ion-label color="medium" position="stacked">{{"Postcode" | translate}}</ion-label>
+      <ion-input required type="text" formControlName="postcode"></ion-input>
+    </ion-item>
+  
+</form>
+</ion-list>
+
+<div class="errors" *ngIf="errors">
+  <div *ngFor="let error of errors | keys" style="text-align: center; padding-top: 20px;">
+    <ion-label color="danger" class="error" [innerHTML]="error.value.message"></ion-label>
+  </div>
+ </div>
+</div>
+
+</ion-content>
+<ion-footer>
+    <ion-toolbar>
+    <ion-button class="submit-button" expand="full" color="{{settings.theme.button}}" [disabled]="!form.valid || disableSubmit" (click)="onSubmit()">{{"Register" | translate}}</ion-button>
+    </ion-toolbar>
+</ion-footer>

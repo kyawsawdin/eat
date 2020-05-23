@@ -1,0 +1,41 @@
+<ion-header mode="ios">
+  <ion-toolbar mode="md">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="{{'/app/tabs/profile'}}"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{"Transaction" | translate}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+<ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+  <ion-refresher-content></ion-refresher-content>
+</ion-refresher>
+
+<ion-item lines="none" detail="false">
+<ion-icon class="icon-start ion-margin-end" [ios]="'wallet-outline'" [md]="'wallet-sharp'" slot="start"></ion-icon>
+<ion-card-title *ngIf="settings.customer?.wallet?.balance">{{settings.customer.wallet.balance | currency:values.currency:'symbol':'1.'+values.priceDecimal+'-'+values.priceDecimal}}</ion-card-title>
+<ion-button color="{{settings.theme.button}}" slot="end" (click)="addBanalce()" mode="md">
+      {{"Add balance" | translate}}
+</ion-button>
+</ion-item>
+
+<div *ngIf="settings.customer?.wallet">
+<ion-item lines="full" *ngFor="let item of settings.customer.wallet.transactions">
+    <ion-label text-wrap>
+      <ion-text class="amount-balance">
+        <h3>{{item.type.toUpperCase()}} {{item.amount}}</h3>
+        <h2>{{item.balance}}</h2>
+      </ion-text>
+      <ion-text>
+        <p class="date">{{item.date}}</p>
+      </ion-text>
+      <p>{{item.details}}</p>
+      
+    </ion-label>
+    <!--ion-text slot="end"><p>{{item.balance}}</p></ion-text-->
+</ion-item>
+</div>
+
+</ion-content>

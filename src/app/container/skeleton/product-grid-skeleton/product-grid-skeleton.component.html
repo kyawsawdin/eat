@@ -1,0 +1,18 @@
+<div class="product-grid3">
+  <ion-list>
+    <ion-grid class="ion-no-padding">
+      <ion-row>
+      <ion-col *ngFor="let item of items" class="product" size="4" size-sm="3" size-md="3" size-lg="2">
+        <ion-card button="true">
+          <ion-skeleton-text animated style="height: 155px"></ion-skeleton-text>
+          <ion-card-header>
+            <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+          </ion-card-header>
+        </ion-card>
+    </ion-col>
+    </ion-row>
+    </ion-grid>
+  </ion-list>
+</div>

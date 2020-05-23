@@ -1,0 +1,56 @@
+<ion-header mode="ios">
+  <ion-toolbar mode="md">
+  	<ion-buttons slot="start">
+      <ion-back-button defaultHref="{{'/wallet'}}"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{'Wallet Recharge' | translate}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+	<ion-item style="padding-top: 30px" lines="none">
+		<ion-label position="floating">{{'Enter Amount' | translate}}</ion-label>
+	    <ion-input required type="number" [(ngModel)]="order.line_items[0].total" name="amount" placeholder="{{'Enter Amount' | translate}}"></ion-input>
+	</ion-item>
+
+	  <ion-radio-group [(ngModel)]="order.payment_method" name="shipping_method" ngDefaultControl (ngModelChange)="onChangePaymentMethod()">
+	    <ion-list-header>
+	      <ion-label>{{"Payment" | translate}}</ion-label>
+	    </ion-list-header>
+
+	    <div *ngFor="let item of values.paymentMethods">
+	      <div *ngIf="item.id == 'stripe'">
+	        <form action="/charge" method="post" id="payment-form">
+	          <div class="form-row">
+
+	            <div id="card-element">
+	              <!-- A Stripe Element will be inserted here. -->
+	            </div>
+
+	            <!-- Used to display form errors. -->
+	            <div id="card-errors" class="card-error" role="alert"></div>
+	          </div>
+	      </form>
+	    </div>
+	    <ion-item mode="md" lines="full" *ngIf="item.id !== 'wallet' && item.id !== 'cod'">
+	      <ion-label class="ion-text-wrap">
+	        <span [innerHTML]="item.title"></span>
+	      </ion-label>
+	      <ion-radio value="{{item.id}}"></ion-radio>
+	    </ion-item>
+	    </div>
+	    
+	  </ion-radio-group>
+
+	  <ion-item lines="none" class="payment-instaructions" *ngIf="order?.payment_method">
+	    <ion-label class="ion-text-wrap payment-instaructions" [innerHTML]="getDescription()"></ion-label>
+	  </ion-item>
+
+</ion-content>
+<ion-footer>
+    <ion-toolbar>
+		<ion-button class="submit-button" *ngIf="order.payment_method !='stripe'" expand="full" color="{{settings.theme.button}}" [disabled]="disableSubmit || order.line_items[0].total < 0" (click)="save()">{{"Place Order" | translate}} {{order.line_items[0].total | currency:values.currency:'symbol':'1.'+values.priceDecimal+'-'+values.priceDecimal}}</ion-button>
+    <ion-button class="submit-button" id="card-button" *ngIf="order.payment_method =='stripe'" expand="full" color="{{settings.theme.button}}" [disabled]="disableSubmit || order.line_items[0].total < 0" (click)="onClickStripeSubmit()">{{"Place Order" | translate}} {{order.line_items[0].total | currency:values.currency:'symbol':'1.'+values.priceDecimal+'-'+values.priceDecimal}}</ion-button>
+    </ion-toolbar>
+</ion-footer>

@@ -1,0 +1,25 @@
+<ion-header mode="ios">
+  <ion-toolbar>
+    <ion-title>{{'Category' | translate}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+	<div *ngIf="values.mainCategories" class="products">
+		<ion-item *ngFor="let item of values.mainCategories" (click)="getProducts(item)" button="true" mode="{{values.effect}}">
+			<ion-thumbnail slot="start">
+			  <img *ngIf="item.image.src" src="{{item.image.src}}">
+			</ion-thumbnail>
+			<ion-label>
+			  <h3 [innerHTML]="item.name" class="product-name"></h3>
+			  <p class="product-description" [innerHTML]="item.description"></p>
+			</ion-label>
+		</ion-item>
+	</div>
+
+	<div *ngIf="!values.mainCategories">
+		<app-product-skeleton count="20"></app-product-skeleton>
+	</div>
+
+</ion-content>

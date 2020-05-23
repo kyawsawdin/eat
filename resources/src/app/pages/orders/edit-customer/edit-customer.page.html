@@ -1,0 +1,62 @@
+<ion-header mode="ios">
+  <ion-toolbar mode="md">
+	<ion-buttons slot="start" (click)="close()">
+      <ion-back-button defaultHref="/cart"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{"Address" | translate}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+	<ion-list>
+		<ion-item lines="full">
+		  <ion-label color="medium" position="stacked">{{"First Name" | translate}}</ion-label>
+		  <ion-input required type="text" [(ngModel)]="shipping.first_name" name="firstname"></ion-input>
+		</ion-item>
+		<ion-item lines="full">
+		  <ion-label color="medium" position="stacked">{{"Last Name" | translate}}</ion-label>
+		  <ion-input required type="text" [(ngModel)]="shipping.last_name" name="lastname"></ion-input>
+		</ion-item>
+		<ion-item lines="full">
+		  <ion-label color="medium" position="stacked">{{"Email" | translate}}</ion-label>
+		  <ion-input required type="text" [(ngModel)]="billing.email" name="email"></ion-input>
+		</ion-item>
+		<ion-item lines="full">
+		  <ion-label color="medium" position="stacked">{{"Phone" | translate}}</ion-label>
+		  <ion-input required type="text" [(ngModel)]="billing.phone" name="phone"></ion-input>
+		</ion-item>
+		<!--ion-item lines="full">
+		  <ion-label color="medium" position="stacked">{{"Company" | translate}}</ion-label>
+		  <ion-input required type="text" [(ngModel)]="shipping.company" name="company"></ion-input>
+		</ion-item-->
+		<ion-item lines="full">
+		  <ion-label color="medium" position="stacked">{{"Address 1" | translate}}</ion-label>
+		  <ion-input required type="text" [(ngModel)]="shipping.address_1" name="address_1"></ion-input>
+		</ion-item>
+		<ion-item lines="full">
+		  <ion-label color="medium" position="stacked">{{"Address 2" | translate}}</ion-label>
+		  <ion-input required type="text" [(ngModel)]="shipping.city" name="city"></ion-input>
+		</ion-item>
+		<ion-item lines="full">
+		  <ion-label color="medium" position="stacked">{{"City" | translate}}</ion-label>
+		  <ion-input required type="text" [(ngModel)]="shipping.city" name="city"></ion-input>
+		</ion-item>
+		<!--ion-item lines="full">
+		  <ion-label color="medium" position="stacked">{{"State" | translate}}</ion-label>
+		  <ion-input required type="text" [(ngModel)]="shipping.state" name="state"></ion-input>
+		</ion-item-->
+		<ion-item lines="full">
+		  <ion-label color="medium" position="stacked">{{"Postcode" | translate}}</ion-label>
+		  <ion-input required type="text" [(ngModel)]="shipping.postcode" name="postcode"></ion-input>
+		</ion-item>
+		<!--ion-item lines="full">
+		  <ion-label color="medium" position="stacked">{{"Country" | translate}}</ion-label>
+		  <ion-input required type="text" [(ngModel)]="shipping.country" name="country"></ion-input>
+		</ion-item-->
+	</ion-list>
+</ion-content>
+<ion-footer>
+    <ion-toolbar>
+		<ion-button expand="full" color="success" (click)="ok()">{{"OK" | translate}}</ion-button>
+    </ion-toolbar>
+</ion-footer>

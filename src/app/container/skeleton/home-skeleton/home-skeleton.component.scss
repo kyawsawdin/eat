@@ -1,0 +1,25 @@
+ion-slides {
+    height: 120px;
+    margin: 4px;
+    margin-right: 16px;
+    margin-left: 16px;
+    margin-top: 16px;
+    border-radius: 2px;
+}
+ion-col {
+    text-align: center;
+}
+.category-thumbnail {
+    height: 40px;
+    border-radius: 2px;
+    width: 40px;
+    margin: auto;
+    margin-bottom: 8px;
+}
+ion-item {
+    --background-activated-opacity: 0.03;
+    --border-color: var(--ion-color-light, #fff);
+    --detail-icon-opacity: 0.1;
+    //--inner-padding-bottom: 8px;
+    //--inner-padding-top: 8px;
+}

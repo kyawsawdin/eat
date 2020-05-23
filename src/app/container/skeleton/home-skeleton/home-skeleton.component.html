@@ -1,0 +1,37 @@
+<ion-slides>
+  <ion-slide>
+    <ion-skeleton-text style="--background-color: red;" animated></ion-skeleton-text>
+  </ion-slide>
+  <ion-slide>
+    <ion-skeleton-text style="width: 60%; margin: auto;" animated></ion-skeleton-text>
+  </ion-slide>
+  <ion-slide>
+    <ion-skeleton-text style="width: 60%; margin: auto;" animated></ion-skeleton-text>
+  </ion-slide>
+</ion-slides>
+<ion-grid>
+  <ion-row class="ion-align-items-center">
+    <ion-col *ngFor="let item of categories" size="2.4" class="ion-align-self-center">
+      <div class="category-thumbnail">
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </div>
+      <ion-skeleton-text animated style="width: 60%; margin: auto;"></ion-skeleton-text>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+<ion-item *ngFor="let item of items">
+    <ion-thumbnail slot="start">
+      <ion-skeleton-text animated></ion-skeleton-text>
+    </ion-thumbnail>
+    <ion-label>
+      <h3>
+        <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+      </h3>
+      <p>
+        <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+      </p>
+      <p>
+        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+      </p>
+    </ion-label>
+</ion-item>

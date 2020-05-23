@@ -29,3 +29,13 @@ npm-debug.log*
 /platforms
 /plugins
 /www
+
+/resources/ios
+/resources/android
+
+GoogleService-Info.plist
+google-services.json
+Makefile
+android.apk
+src.zip
+

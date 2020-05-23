@@ -1,0 +1,238 @@
+<ion-header mode="ios">
+  <ion-toolbar mode="md">
+
+    <ion-buttons slot="start">
+      <!--ion-icon slot="icon-only" name="location-outline" (click)="getLocation()"></ion-icon-->
+        <!--ion-button>
+        {{userAddress}}
+        </ion-button-->
+    </ion-buttons>
+    <ion-title style="text-align: center;" class="logo-title">
+       {{"SUPER STORE" | translate}}
+      <!--img src="assets/image/logo.png" style="width: 50px;height: auto;"-->
+      </ion-title>
+    <!--ion-buttons slot="end">
+      <ion-button class="total-count-button" routerDirection="forward" [routerLink]="['/cart']">
+          <ion-icon slot="icon-only" name="basket-outline"></ion-icon>
+          <ion-badge *ngIf="getTotalCount() != 0" color="danger" class="total-count"><span class="count-text">{{values.getTotalCount()}}</span></ion-badge>
+      </ion-button>
+    </ion-buttons-->
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-fab *ngIf="values.getTotalCount() != 0" vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button mode="ios" translucent="true" color="{{settings.theme.button}}" (click)="cart()">
+        <ion-icon name="basket"></ion-icon>
+        <ion-badge color="danger" class="fab-count"><span class="count-text">{{values.getTotalCount()}}</span></ion-badge>
+      </ion-fab-button>
+    </ion-fab>
+
+    <div *ngIf="!blocks?.blocks">
+      <app-home-skeleton></app-home-skeleton>
+    </div>
+
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)" *ngIf="settings.settings?.pull_to_refresh">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    <!--ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="settings.settings?.enable_home_chat">
+        <a href="https://wa.me/{{settings.settings?.whatsapp_number}}">
+            <ion-fab-button size="small" color="whatsapp">
+                <ion-icon name="logo-whatsapp"></ion-icon>
+            </ion-fab-button>
+        </a>
+    </ion-fab-->
+
+    <div *ngFor="let children of blocks?.blocks" hideWhen="loading" class="blocks">
+
+        <div *ngIf="children.block_type == 'banner_block'" [style.background-color]="children.bg_color == '#FFFFFF' || children.bg_color == '#ffffff' ? 'unset' : children.bg_color" [style.margin]="children.margin" [style.padding]="children.padding" class="banner_block">
+        <ion-card-title class="title" mode="md" class="{{children.header_align}}" [style.color]="children.title_color != '#000000' ? children.title_color : 'unset'">{{children.title}}</ion-card-title> 
+           
+            <!-- Banner Slider -->
+            <div *ngIf="children.children?.length && children.style == 'slider'">
+                <ion-slides style="line-height: 0;" pager="true" dir="{{settings.dir}}">
+                    <ion-slide *ngFor="let image of children.children"> 
+                      <div class="ion-activatable ripple-parent">
+                        <img class="{{children.banner_shadow}}" src="{{image.image}}" [style.width.px]="screenWidth" (click)="goto(image)" [style.border-radius]="children.border_radius" [style.padding]="children.margin_between">
+                        <ion-ripple-effect [style.border-radius]="children.border_radius" [style.padding]="children.margin_between"></ion-ripple-effect>
+                      </div>
+                    </ion-slide>
+                </ion-slides>
+            </div>
+
+            <!-- Banner Scroll -->
+            <ion-slides [options]="slideOpts" *ngIf="children.children?.length && children.style == 'scroll'">
+              <ion-slide *ngFor="let image of children.children ; let i = index" >
+                <ion-card mode="{{values.effect}}" (click)="goto(image)" button="true" [style.margin]="children.margin_between" [style.border-radius]="children.border_radius">
+                  <img src="{{image.image}}"> 
+                </ion-card> 
+              </ion-slide>
+             </ion-slides>
+
+            <!-- Banner Grid -->
+            <div *ngIf="children.children?.length && children.style == 'grid'" class="banner-grid">
+                <ion-row>
+                    <ion-col style="line-height: 0;" class="ion-activatable ion-focusable hydrated" *ngFor="let image of children.children" size="{{children.child_width/8.33333333}}" size-sm="6" size-md="4" size-lg="4" [style.padding]="children.margin_between">
+                      <ion-card mode="{{values.effect}}" (click)="goto(image)" button="true">
+                        <img src="{{image.image}}" [style.border-radius]="children.border_radius"> 
+                      </ion-card>
+                    </ion-col>
+                </ion-row>
+            </div>
+        </div>
+
+      <!-- category-block-->
+      <div *ngIf="children.block_type == 'category_block'" [style.background-color]="children.bg_color == '#FFFFFF' || children.bg_color == '#ffffff' ? 'unset' : children.bg_color" [style.margin]="children.margin" [style.padding]="children.padding" class="category">
+        <ion-card-title class="title" mode="md" *ngIf="values.categories" class="{{children.header_align}}" [style.color]="children.title_color != '#000000' ? children.title_color : 'unset'">{{children.title}}</ion-card-title>
+            <!-- Category Scroll -->
+            <div *ngIf="values.categories && children.style == 'scroll'" class="category-slider-scroll">
+                <div class="scrollmenu2" [ngClass]="{'floating-header': children.header_align == 'left_floating'}">
+                <div class="scroll-related-products">
+                  <div class="product" *ngFor="let item of getSubCategories(children.link_id)" [style.width.%]="children.child_width" [style.padding]="children.margin_between">
+                      <ion-card button="true" mode="{{values.effect}}" class="ion-activatable ion-focusable hydrated {{settings.settings.product_shadow}}" [style.border-radius.px]="settings.dimensions.productBorderRadius" (click)="getCategory(item)">
+                        <img *ngIf="item.image?.src" src="{{item.image.src}}">
+                        <ion-card-header>
+                            <ion-card-title text-center mode="md" [innerHTML]="item.name">{{item.name}}</ion-card-title>
+                        </ion-card-header>
+                      </ion-card>
+                  </div>
+                </div>
+                </div>
+            </div>
+            
+            <!-- Category Grid -->
+            <ion-grid class="category-grid">
+              <ion-row class="ion-align-items-center">
+                <ion-col *ngFor="let item of getSubCategories(children.link_id)" size="2.4">
+                <ion-card style="border: none;" class="ion-align-self-center" button="true" (click)="getCategory(item)" mode="{{values.effect}}">
+                  <div class="category-thumbnail">
+                    <img *ngIf="item.image?.src" src="{{item.image.src}}">
+                  </div>
+                  <ion-card-title style="text-align: center;" mode="md" [innerHTML]="item.name">{{item.name}}</ion-card-title>
+                </ion-card>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+            
+            <!-- Category Grid -->
+            <!--div *ngIf="values.categories && children.style == 'grid'" class="category-slider-grid">
+                <ion-row class="row unlimited-items">
+                    <ion-col class="col {{item.slug}}" *ngFor="let item of getSubCategories(children.link_id)" [style.padding]="children.margin_between" size="3" size-sm="2" size-md="2" size-lg="2">
+                        <div class="ion-activatable ion-focusable hydrated">
+                            <ion-card button="true" (click)="getCategory(item)" mode="{{values.effect}}" class="ion-activatable ion-focusable hydrated {{children.banner_shadow}}" [style.border-radius]="children.border_radius"> 
+                                <img *ngIf="item.image?.src" src="{{item.image.src}}">
+                                <ion-card-header>
+                                    <ion-card-title text-center mode="md" [innerHTML]="item.name">{{item.name}}</ion-card-title>
+                                </ion-card-header>
+                            </ion-card>
+                        </div>
+                    </ion-col>
+                </ion-row>
+            </div-->
+        </div>
+    </div>
+
+    <!-- This is GRID_2 Uncomment this when you are using this and comment or delete other GRID_X -->
+    <div class="product-grid2">
+      <ion-list *ngIf="blocks.recentProducts && blocks.recentProducts.length">
+        <ion-grid class="ion-no-padding">
+          <ion-row>
+          <ion-col *ngFor="let item of blocks.recentProducts" class="product product-col" size="12" size-md="4">
+            <ion-card mode="{{values.effect}}" button="true" (click)="detail(item)">
+              <ion-grid>
+                <ion-row>
+                <ion-col size="3" style="line-height: 0;">
+                  <img *ngIf="item.images[0] && item.images[0].src" src="{{item.images[0].src}}">
+                </ion-col>
+                <ion-col>
+                <ion-card-header>
+                  <ion-card-title>
+                  <ion-label><h2 class="product-name" [innerHTML]="item.name"></h2>
+                    <p class="product-description" [innerHTML]="item.description"></p>
+                  </ion-label>
+                  </ion-card-title>
+                  <ion-card-subtitle>{{item.price | currency:values.currency:'symbol':'1.'+values.priceDecimal+'-'+values.priceDecimal}}<span class="regular_price" *ngIf="item.sale_price">{{item.regular_price | currency:values.currency:'symbol':'1.'+values.priceDecimal+'-'+values.priceDecimal}}</span></ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content>
+                        <div class="add-button-block">
+                      <div *ngIf="values.hasItemInOrder(item)">
+                        <ion-button mode="ios" fill="{{values.button.fill}}" color="{{values.button.color}}" style="opacity: 0.8" size="small" slot="end" (click)="removeProduct(item); $event.stopPropagation()">
+                        <ion-icon slot="icon-only" name="remove-circle"></ion-icon>
+                      </ion-button>
+                        <ion-button class="button-count" fill="clear" color="{{values.button.color}}" size="small" slot="end">
+                        <ion-text>{{values.getCount(item)}}</ion-text>
+                      </ion-button>
+                        <ion-button mode="ios" fill="{{values.button.fill}}" color="{{values.button.color}}" size="small" (click)="addProduct(item); $event.stopPropagation()">
+                        <ion-icon slot="icon-only" name="add-circle"></ion-icon>
+                      </ion-button>
+                      </div>
+                      <div *ngIf="!values.hasItemInOrder(item)">
+                        <ion-button mode="ios" fill="{{values.button.fill}}" color="{{values.button.color}}" size="small" (click)="addProduct(item); $event.stopPropagation()">
+                         {{"ADD" | translate}}
+                      </ion-button>
+                      </div>
+                    </div>
+                </ion-card-content>
+              </ion-col>              
+                  </ion-row>
+                    </ion-grid>
+            </ion-card>
+        </ion-col>
+        </ion-row>
+        </ion-grid>
+      </ion-list>
+    </div>
+
+
+    <!-- This is GRID_1 Comment/Uncomment this when you are using this and comment or delete other GRID_X -->
+    <!--div class="product-grid1">
+      <ion-list *ngIf="blocks.recentProducts && blocks.recentProducts.length">
+        <ion-grid class="ion-no-padding">
+          <ion-row>
+          <ion-col class="product-col" *ngFor="let item of blocks.recentProducts" class="product" size="4" size-sm="3" size-md="3" size-lg="2">
+            <ion-card mode="{{values.effect}}" button="true" (click)="detail(item)">
+              <img *ngIf="item.images[0] && item.images[0].src" src="{{item.images[0].src}}">
+              <ion-card-header>
+                <ion-card-subtitle>{{item.price | currency:values.currency:'symbol':'1.'+values.priceDecimal+'-'+values.priceDecimal}}<span class="regular_price" *ngIf="item.sale_price">{{item.regular_price | currency:values.currency:'symbol':'1.'+values.priceDecimal+'-'+values.priceDecimal}}</span></ion-card-subtitle>
+                <ion-card-title><h2 class="product-name" [innerHTML]="item.name"></h2></ion-card-title>
+              </ion-card-header>
+              <ion-button color="success" class="offer" *ngIf="((item.regular_price - item.price) /item.regular_price*100) >= 1">{{(item.regular_price - item.price) /item.regular_price*100 | number : '1.0-0'}}%</ion-button>
+              <ion-card-content>
+                      <div class="add-button-block">
+                    <div *ngIf="values.hasItemInOrder(item)">
+                      <ion-button mode="ios" fill="{{values.button.fill}}" color="{{values.button.color}}"  size="small" slot="end" (click)="removeProduct(item); $event.stopPropagation()">
+                      <ion-icon slot="icon-only" name="remove"></ion-icon>
+                    </ion-button>
+                      <ion-button class="button-count" fill="clear" color="{{values.button.color}}" size="small" slot="end">
+                      <ion-text>{{values.getCount(item)}}</ion-text>
+                    </ion-button>
+                      <ion-button mode="ios" fill="{{values.button.fill}}" color="{{values.button.color}}" size="small" (click)="addProduct(item); $event.stopPropagation()">
+                      <ion-icon slot="icon-only" name="add"></ion-icon>
+                    </ion-button>
+                    </div>
+                    <div *ngIf="!values.hasItemInOrder(item)">
+                      <ion-button mode="ios" fill="{{values.button.fill}}" color="{{values.button.color}}" size="small" (click)="addProduct(item); $event.stopPropagation()">
+                      ADD
+                    </ion-button>
+                    </div>
+                  </div>
+              </ion-card-content>
+            </ion-card>
+        </ion-col>
+        </ion-row>
+        </ion-grid>
+      </ion-list>
+    </div-->
+
+
+
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="doInfinite($event)" *ngIf="has_more_items">
+      <ion-infinite-scroll-content
+        loadingSpinner="bubbles">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+
+
+</ion-content>
+

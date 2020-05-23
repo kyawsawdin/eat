@@ -1,0 +1,11 @@
+
+.account-menu {
+	margin: 10px;
+	ion-item {
+		--background-activated-opacity: 0.03;
+		--border-color: var(--ion-color-light, #fff);
+		--detail-icon-opacity: 0.1;
+		--inner-padding-bottom: 8px;
+		--inner-padding-top: 8px;
+	}	
+}
