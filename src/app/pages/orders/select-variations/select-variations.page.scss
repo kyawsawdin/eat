@@ -12,14 +12,17 @@ ion-content {
 }
 .item-status {
     font-size: 10px;
+    font-weight: 400;
 }
 .outofstock {
     color: var(--ion-color-danger, #eb445a);
     font-size: 10px;
+    font-weight: 400;
 }
 .instock {
     color: var(--ion-color-success, #2fdf75);
     font-size: 10px;
+    font-weight: 400;
 }
 .product-grid2 {
     .product-col {

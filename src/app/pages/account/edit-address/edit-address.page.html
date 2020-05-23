@@ -143,5 +143,5 @@
 </ion-list>
 
 
-<ion-button *ngIf="settings.customer" color="{{settings.theme.button}}" expand="block" (click)="processAddress()" [disabled]="disableButton" fill="solid">{{"Save" | translate}}</ion-button>
+<ion-button style="margin-bottom: 8px;" class="submit-button" *ngIf="settings.customer" color="{{settings.theme.button}}" expand="block" (click)="processAddress()" [disabled]="disableButton" fill="solid">{{"Save" | translate}}</ion-button>
 </ion-content>
