@@ -51,7 +51,7 @@ export class Service {
 
 	getItem(endPoint, filter = {}) {
 		const url = this.config.setUrl('GET', endPoint + '?', filter);
-		if (this.platform.is('hybrid')) {
+		if (this.platform.is('ios') && this.platform.is('hybrid')) {
 			return new Promise((resolve, reject) => {
 	            this.ionicHttp.get(url, {}, {})
 				  .then(data => {
@@ -76,7 +76,7 @@ export class Service {
 
 	deleteItem(endPoint, params = {}){
 		const url = this.config.setUrl('DELETE', endPoint + '?', params);
-		if (this.platform.is('hybrid')) {
+		if (this.platform.is('ios') && this.platform.is('hybrid')) {
 			return new Promise((resolve, reject) => {
 	            this.ionicHttp.delete(url, {}, {})
 				  .then(data => {
@@ -101,7 +101,7 @@ export class Service {
 
 	putItem(endPoint, data, params = {}){
 		const url = this.config.setUrl('PUT', endPoint + '?', params);
-		if (this.platform.is('hybrid')) {
+		if (this.platform.is('ios') && this.platform.is('hybrid')) {
 			this.ionicHttp.setHeader(this.options, 'Content-Type', 'application/json; charset=UTF-8');
 			this.ionicHttp.setDataSerializer('json');
 			return new Promise((resolve, reject) => {
@@ -128,7 +128,7 @@ export class Service {
 
 	wcpost(endPoint, data, params = {}){
 		const url = this.config.setUrl('POST', endPoint + '?', params);
-		if (this.platform.is('hybrid')) {
+		if (this.platform.is('ios') && this.platform.is('hybrid')) {
 			this.ionicHttp.setHeader(this.options, 'Content-Type', 'application/json; charset=UTF-8');
 			this.ionicHttp.setDataSerializer('json');
 			return new Promise((resolve, reject) => {
@@ -155,7 +155,17 @@ export class Service {
 
 	postItem(endPoint, data = {}){
 		const url = this.config.url + '/wp-admin/admin-ajax.php?action=mstoreapp-' + endPoint;
-		if (this.platform.is('hybrid')) {
+		var params = new HttpParams();
+		for (var key in data) { if('object' !== typeof(data[key])) params = params.set(key, data[key]) }
+		params = params.set('lang', this.config.lang);
+		return new Promise((resolve, reject) => {
+            this.http.post(url, params, this.config.options).pipe(map((res: any) => res)).subscribe(data => {
+                resolve(data);
+            }, err => {
+            	reject(err.error);
+            });
+        });
+		/*if (this.platform.is('ios') && this.platform.is('hybrid')) {
 			for (var key in data) { if('object' === typeof(data[key])) delete data[key] }
 			this.ionicHttp.setHeader(this.options, 'Content-Type', 'application/json; charset=UTF-8');
 			this.ionicHttp.setDataSerializer('urlencoded');
@@ -180,7 +190,7 @@ export class Service {
 	            	reject(err.error);
 	            });
 	        });
-		}
+		}*/
 	}
 
 	postFlutterItem(endPoint, data = {}){
@@ -348,7 +358,7 @@ export class Service {
 	}
 
 	async checkUrl(url) {
-		if (this.platform.is('hybrid')) {
+		if (this.platform.is('ios') && this.platform.is('hybrid')) {
 			return new Promise((resolve, reject) => {
 	            this.ionicHttp.get(url, {}, {})
 				  .then(data => {
@@ -371,7 +381,7 @@ export class Service {
 
 	getItemWihtoutAlert(endPoint, filter = {}) {
 		const url = this.config.setUrl('GET', endPoint + '?', filter);
-		if (this.platform.is('hybrid')) {
+		if (this.platform.is('ios') && this.platform.is('hybrid')) {
 			return new Promise((resolve, reject) => {
 	            this.ionicHttp.get(url, {}, {})
 				  .then(data => {
