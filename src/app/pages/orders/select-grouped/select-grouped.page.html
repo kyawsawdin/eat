@@ -1,7 +1,7 @@
 <ion-header mode="ios">
   <ion-toolbar mode="md">
     <ion-buttons slot="start" (click)="close()">
-      <ion-back-button defaultHref="{{'/app/tabs/'+path}}"></ion-back-button>
+      <ion-back-button defaultHref="{{'/'+path}}"></ion-back-button>
     </ion-buttons>
     <ion-title *ngIf="product.name" [innerHTML]="product.name"></ion-title>
     <ion-buttons slot="end">

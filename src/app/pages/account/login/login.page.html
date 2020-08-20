@@ -89,7 +89,7 @@
 
       </ion-card>
 
-          <ion-grid class="socila-login">
+          <!--ion-grid class="socila-login">
             <ion-row>
             <ion-col size="6">
             <ion-button expand="full" shape="undefined" mode="md" fill="solid" color="google" (click)="googleLogin()" [disabled]="googleLogingInn">
@@ -98,6 +98,19 @@
             </ion-col>
             <ion-col size="6">
             <ion-button expand="full" shape="undefined" mode="md" fill="solid" color="facebook" (click)="facebookLogin()" [disabled]="facebookLogingInn">
+            <ion-icon slot="start" name="logo-facebook"></ion-icon>{{"Facebook"| translate}}</ion-button>
+            </ion-col>
+            </ion-row>
+          </ion-grid-->
+           <ion-grid class="socila-login">
+            <ion-row>
+            <ion-col size="6">
+            <ion-button expand="full" shape="undefined" mode="md" fill="solid" color="google"[disabled]="googleLogingInn">
+            <ion-icon slot="start" name="logo-google"></ion-icon>{{"Google"| translate}}</ion-button>
+            <br/>
+            </ion-col>
+            <ion-col size="6">
+            <ion-button expand="full" shape="undefined" mode="md" fill="solid" color="facebook" [disabled]="facebookLogingInn">
             <ion-icon slot="start" name="logo-facebook"></ion-icon>{{"Facebook"| translate}}</ion-button>
             </ion-col>
             </ion-row>

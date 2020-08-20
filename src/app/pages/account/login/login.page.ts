@@ -5,8 +5,8 @@ import { Service } from './../../../api.service';
 import { Settings } from './../../../data/settings';
 import { FormBuilder, Validators } from '@angular/forms';
 import { OneSignal } from '@ionic-native/onesignal/ngx';
-import { GooglePlus } from '@ionic-native/google-plus/ngx';
-import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
+//import { GooglePlus } from '@ionic-native/google-plus/ngx';
+//import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
 import { ForgottenPage } from './../forgotten/forgotten.page';
 import { Storage } from '@ionic/storage';
 
@@ -38,7 +38,7 @@ export class LoginPage implements OnInit {
     userInfo: any;
     phoneVerificationError: any;
     loading: any;
-    constructor( private storage: Storage, public modalCtrl: ModalController, public navParams: NavParams, public platform: Platform, private oneSignal: OneSignal, public service: Service, public settings: Settings, public loadingController: LoadingController, public router: Router, public navCtrl: NavController, private fb: FormBuilder, private googlePlus: GooglePlus, private facebook: Facebook) {
+    constructor( private storage: Storage, public modalCtrl: ModalController, public navParams: NavParams, public platform: Platform, private oneSignal: OneSignal, public service: Service, public settings: Settings, public loadingController: LoadingController, public router: Router, public navCtrl: NavController, private fb: FormBuilder/*, private googlePlus: GooglePlus, private facebook: Facebook*/) {
         this.form = this.fb.group({
             username: ['', Validators.required],
             password: ['', Validators.required]
@@ -107,7 +107,7 @@ export class LoginPage implements OnInit {
           const { data } = await modal.onWillDismiss();
         //this.navCtrl.navigateForward('/app/tabs/account/login/forgotten');
     }
-    googleLogin(){
+   /* googleLogin(){
         this.googleLogingInn = true;
         this.presentLoading();
         this.googlePlus.login({})
@@ -197,7 +197,7 @@ export class LoginPage implements OnInit {
             this.facebookLogingInn = false;
             this.dismissLoading();
         });
-    }
+    }*/
     loginWithPhone(){
         this.phoneLogingInn = true;
         (<any>window).AccountKitPlugin.loginWithPhoneNumber({

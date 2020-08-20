@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.mstoreapp.ordernow" version="0.1.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Order Now</name>
-    <description>An awesome admin app for order now for woocommerce.</description>
-    <author email="support@mstoreapp.com" href="http://mstoreapp.com/">Mstoreapp Team</author>
+<widget id="com.mstoreapp.ordernowwcmp" version="0.1.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>YKKO</name>
+    <description>YKKO</description>
+    <author email="support@ykko.com.mm" href="https://eat.ykko.com.mm">YKKO</author>
     <content src="index.html" />
     <access origin="*" />
     <allow-navigation href="http://localhost:8080/*" />
@@ -122,9 +122,5 @@
     <plugin name="cordova-plugin-inappbrowser" spec="~3.2.0" />
     <plugin name="cordova-plugin-googleplus" spec="~8.4.0">
         <variable name="REVERSED_CLIENT_ID" value="com.googleusercontent.apps.806565206717-akvl0j5s0eifi2ntohfrirfq5geecfkl" />
-    </plugin>
-    <plugin name="cordova-plugin-facebook4" spec="~6.4.0">
-        <variable name="APP_ID" value="2133337676792780" />
-        <variable name="APP_NAME" value="woocommerce app" />
     </plugin>
 </widget>

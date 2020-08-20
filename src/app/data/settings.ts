@@ -41,6 +41,8 @@ export class Settings implements OnInit {
     widthMultipy: any = 1;
     width: any;
     status: any;
+    add_wishlist:any;
+    remove_wishlist:any;
     mode: any = 'ios';
     dir: any = 'ltr';
     dimensions: any = {
@@ -69,9 +71,10 @@ export class Settings implements OnInit {
             await this.api.postItem('add_wishlist', {
                 product_id: id
             }).then(res => {
+                this.add_wishlist = res;
                 this.wishlist = [];
-                for (let item in res) {
-                    this.wishlist[res[item].id] = res[item].id;
+                for (let item in  this.add_wishlist) {
+                    this.wishlist[ this.add_wishlist[item].id] =  this.add_wishlist[item].id;
                 }
             }, err => {
                 console.log(err);
@@ -97,9 +100,10 @@ export class Settings implements OnInit {
             await this.api.postItem('remove_wishlist', {
                 product_id: id
             }).then(res => {
+                this.remove_wishlist = res;
                 this.wishlist = [];
-                for (let item in res) {
-                    this.wishlist[res[item].id] = res[item].id;
+                for (let item in this.remove_wishlist ) {
+                    this.wishlist[this.remove_wishlist [item].id] = this.remove_wishlist [item].id;
                 }
             }, err => {
                 console.log(err);

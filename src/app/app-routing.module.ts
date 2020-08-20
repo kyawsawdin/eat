@@ -70,10 +70,6 @@ const routes: Routes = [
     canLoad: [CheckTutorial]
   },
   {
-    path: 'location',
-    loadChildren: () => import('./pages/location/location.module').then( m => m.LocationPageModule)
-  },
-  {
     path: 'address',
     loadChildren: () => import('./pages/account/address/address.module').then( m => m.AddressPageModule)
   },

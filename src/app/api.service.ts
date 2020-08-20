@@ -21,7 +21,10 @@ headers.append('Content-Type', 'application/x-www-form-urlencoded');
 export class Service {
 
   options: any = {};
-  filter : any = {};
+  vendorFilter : any = { page: 1 };
+  vendors: any = [];
+  hasMoreVendors: boolean = true;
+  userLocation: any = { latitude: 0, longitude: 0, address: '', distance: 10 }
   constructor(public alertController: AlertController, public platform: Platform, private http: HttpClient, private config: Config, private ionicHttp: HTTP) {
   	this.options.withCredentials = true;
     this.options.headers = headers;
@@ -154,10 +157,39 @@ export class Service {
 	}
 
 	postItem(endPoint, data = {}){
+
 		const url = this.config.url + '/wp-admin/admin-ajax.php?action=mstoreapp-' + endPoint;
 		var params = new HttpParams();
+
+		// For Testing only on browser
+		/*this.userLocation.latitude = '12.9896';
+		this.userLocation.longitude = '88.7127';
+		this.userLocation.distance = '10';
+		this.userLocation.address = 'Hoodi, Karnataka, India';*/
+
+		if(this.userLocation.latitude && this.userLocation.longitude) {
+
+			// For Dokan Pro and WCFM Location Filter
+			if(this.userLocation.latitude && this.userLocation.longitude) {
+				data = Object.assign(this.userLocation, data);
+			}
+
+			// For Location filter WCFM
+			var wcfmparams = new HttpParams();
+			wcfmparams = wcfmparams.set('wcfmmp_radius_lat', this.userLocation.latitude);
+			wcfmparams = wcfmparams.set('wcfmmp_radius_lng', this.userLocation.longitude);
+			wcfmparams = wcfmparams.set('wcfmmp_radius_range', this.userLocation.distance);
+			params = params.set('search_data', wcfmparams.toString());
+
+		}
+
 		for (var key in data) { if('object' !== typeof(data[key])) params = params.set(key, data[key]) }
 		params = params.set('lang', this.config.lang);
+
+		params = params.set('mstoreapp', '1');
+
+		console.log(params.toString());
+
 		return new Promise((resolve, reject) => {
             this.http.post(url, params, this.config.options).pipe(map((res: any) => res)).subscribe(data => {
                 resolve(data);
@@ -401,5 +433,25 @@ export class Service {
 	        });
 		}
 	}
+
+	async getVendors() {
+		this.vendorFilter.page = 1;
+        await this.postItem('vendors', this.vendorFilter).then(res => {
+            this.vendors = res;
+        }, err => {
+            console.log(err);
+        });
+    }
+    async getMoreVendors(event) {
+        this.vendorFilter.page = this.vendorFilter.page + 1;
+        await this.postItem('vendors', this.vendorFilter).then((res: any) => {
+            this.vendors.push.apply(this.vendors, res);
+            event.target.complete();
+            if (res.length == 0) this.hasMoreVendors = false;
+            else event.target.complete();
+        }, err => {
+            event.target.complete();
+        });
+    }
 
 }

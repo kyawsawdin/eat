@@ -44,9 +44,10 @@ import { RegisterPage } from './pages/account/register/register.page';
 import { ForgottenPage } from './pages/account/forgotten/forgotten.page';
 import { OrderPage } from './pages/account/order/order.page';
 import { ReviewPage } from './pages/review/review.page';
+import { LocationPage } from './pages/location/location.page';
 
-import { Facebook } from '@ionic-native/facebook/ngx';
-import { GooglePlus } from '@ionic-native/google-plus/ngx';
+//import { Facebook } from '@ionic-native/facebook/ngx';
+//import { GooglePlus } from '@ionic-native/google-plus/ngx';
 
 //Permissions
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
@@ -61,8 +62,8 @@ export function createTranslateLoader(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [AppComponent, SelectVariationsPage, EditCustomerPage, FilterPage, LoginPage, RegisterPage, ForgottenPage, OrderPage, ReviewPage, SelectGroupedPage],
-  entryComponents: [SelectVariationsPage, EditCustomerPage, FilterPage, LoginPage, RegisterPage, ForgottenPage, OrderPage, ReviewPage, SelectGroupedPage],
+  declarations: [AppComponent, SelectVariationsPage, EditCustomerPage, FilterPage, LoginPage, RegisterPage, ForgottenPage, OrderPage, ReviewPage, SelectGroupedPage, LocationPage],
+  entryComponents: [SelectVariationsPage, EditCustomerPage, FilterPage, LoginPage, RegisterPage, ForgottenPage, OrderPage, ReviewPage, SelectGroupedPage, LocationPage],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -99,8 +100,8 @@ export function createTranslateLoader(http: HttpClient) {
     Values,
     Config,
     SocialSharing,
-    Facebook,
-    GooglePlus,
+    //Facebook,
+    //GooglePlus,
     CallNumber,
     EmailComposer,
     InAppBrowser,

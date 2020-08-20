@@ -12,12 +12,14 @@ import { Functions } from './../../functions';
 import { Service } from './../../api.service';
 import { SelectVariationsPage } from './../orders/select-variations/select-variations.page';
 import { SelectGroupedPage } from './../orders/select-grouped/select-grouped.page';
-import { LocationPage } from './../location/location.page';
 import { OneSignal } from '@ionic-native/onesignal/ngx';
 import { Storage } from '@ionic/storage';
 import { LoginPage } from './../account/login/login.page';
+import { LocationPage } from './../location/location.page';
 import { LS_USER_COORDS, LS_USER_ADDRESS } from './../shared/common';
-
+import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
 
 declare var google:any;
 @Component({
@@ -26,8 +28,6 @@ declare var google:any;
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
-    userAddress: any = {};
-  userCoords: any = {};
     slideOpts = {
       slidesPerView: 1.5,
       //spaceBetween: 10,
@@ -42,44 +42,50 @@ export class HomePage implements OnInit {
     };
     screenWidth: any = 300;
 	products: any;
+    showaddress: boolean = false;
     blocks: any = {};
     filter: any = { min_price: 0, page: 1, status: 'publish' };
     paymentMethods: any = [];
+    get_wishlist : any;
     has_more_items: boolean = true;
-    constructor(private tc: ToastController, private storage: Storage, private route: ActivatedRoute, public modalCtrl: ModalController, public alertCtrl: AlertController, public datepipe: DatePipe, public currencyPipe: CurrencyPipe, public platform: Platform, public functions: Functions, public nativeStorage: NativeStorage, public navCtrl: NavController, public service: Service, public values: Values, public settings: Settings, public config: Config, public translate: TranslateService, public routerOutlet: IonRouterOutlet, private oneSignal: OneSignal) {
+    loading: any = false;
+    constructor(private nativeGeocoder: NativeGeocoder, private geolocation: Geolocation, private locationAccuracy: LocationAccuracy,private tc: ToastController, private storage: Storage, private route: ActivatedRoute, public modalCtrl: ModalController, public alertCtrl: AlertController, public datepipe: DatePipe, public currencyPipe: CurrencyPipe, public platform: Platform, public functions: Functions, public nativeStorage: NativeStorage, public navCtrl: NavController, public service: Service, public values: Values, public settings: Settings, public config: Config, public translate: TranslateService, public routerOutlet: IonRouterOutlet, private oneSignal: OneSignal) {
         this.screenWidth = this.platform.width();
 	}
     ngOnInit() {    
         this.platform.ready().then(() => {
+             //this.getLocationLatLng();
+             this.locationAccuracy.canRequest().then((canRequest: boolean) => {
+              if(canRequest) {
+                // the accuracy option will be ignored by iOS
+                this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
+                  () => {
+                    this.getLocation();
+                    console.log('Request successful')
+                },
+                  error => {
+                    console.log('Error requesting location permissions', error);
+                });
+              }
+            });
+
+            // Set language to user preference
             this.nativeStorage.getItem('settings').then((settings : any) => {
                 this.config.lang = settings.lang;
-                //this.translateService.setDefaultLang(this.config.lang);
                 document.documentElement.setAttribute('dir', settings.dir);
             }, error => {
             });
-            //this.getProducts();
-            this.getBlocks();
-            if(this.settings.customer.id != 0) {
-                this.userCoords = localStorage.getItem(LS_USER_COORDS) ? localStorage.getItem(LS_USER_COORDS) : '';
-                this.userAddress = localStorage.getItem(LS_USER_ADDRESS) ? localStorage.getItem(LS_USER_ADDRESS) : '';
-            }
+
+            this.storage.get('userLocation').then((value : any) => {
+                if(value) {
+                    this.service.userLocation = value;
+                }
+                this.getBlocks();
+            }, error => {
+                this.getBlocks();
+            });
         });
     }
-   async getLocation(){
-        if(this.settings.customer.id != 0) {
-          this.navCtrl.navigateForward('/location');
-           this.userCoords = localStorage.getItem(LS_USER_COORDS) ? localStorage.getItem(LS_USER_COORDS) : '';
-           this.userAddress = localStorage.getItem(LS_USER_ADDRESS) ? localStorage.getItem(LS_USER_ADDRESS) : '';
-        } else {
-            this.userCoords = '';
-            this.userAddress = '';
-            localStorage.setItem(LS_USER_COORDS, this.userCoords);
-            localStorage.setItem(LS_USER_ADDRESS, this.userAddress);
-            this.presentToastMsg('Notice', 'cannot get a location because location info is empty.');
-         this.login();
-        }  
-    }
-
     async login() {
         const modal = await this.modalCtrl.create({
             component: LoginPage,
@@ -118,7 +124,7 @@ export class HomePage implements OnInit {
             component: SelectVariationsPage,
             componentProps: {
                 item: item,
-                path: 'tabs/home'
+                path: 'app/tabs/home'
             },
             swipeToClose: true,
             presentingElement: this.routerOutlet.nativeEl,
@@ -131,7 +137,7 @@ export class HomePage implements OnInit {
             component: SelectGroupedPage,
             componentProps: {
                 item: item,
-                path: 'tabs/home'
+                path: 'app/tabs/home'
             },
             swipeToClose: true,
             presentingElement: this.routerOutlet.nativeEl,
@@ -139,11 +145,34 @@ export class HomePage implements OnInit {
         modal.present();
         const { data } = await modal.onWillDismiss();
     }
+    async getLocation(){
+        const modal = await this.modalCtrl.create({
+            component: LocationPage,
+            componentProps: {
+                path: 'app/tabs/home'
+            },
+            swipeToClose: true,
+            presentingElement: this.routerOutlet.nativeEl,
+        });
+        modal.present();
+        const { data } = await modal.onWillDismiss();
+        if(data && data.update) {
+            this.filter.page = 1;
+            this.getBlocks();
+            this.service.getVendors();
+        }
+    }
     getBlocks() {
+        this.loading = true;
         this.service.postItem('keys').then(res => {
+            this.loading = false;
             this.blocks = res;
             if(this.blocks && this.blocks.user)
             this.settings.user = this.blocks.user.data;
+            if(this.blocks.settings.location_filter == 1 && this.service.userLocation.latitude == 0) {
+                this.blocks.recentProducts = [];
+                this.blocks.categories = [];
+            }
             //this.settings.theme = this.blocks.theme;
             this.settings.pages = this.blocks.pages;
             if(this.blocks.user)
@@ -192,8 +221,9 @@ export class HomePage implements OnInit {
             }
             if (this.blocks.user) {
                 this.service.postItem('get_wishlist').then(res => {
-                    for (let item in res) {
-                        this.settings.wishlist[res[item].id] = res[item].id;
+                    this.get_wishlist = res;
+                    for (let item in this.get_wishlist ) {
+                        this.settings.wishlist[this.get_wishlist [item].id] = this.get_wishlist [item].id;
                     }
                 }, err => {
                     console.log(err);

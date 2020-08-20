@@ -46,7 +46,7 @@
     </ion-item>
   </ion-list>
 
-  <ion-radio-group [(ngModel)]="values.order.shipping_lines[0].method_id" name="payment_method" ngDefaultControl>
+  <ion-radio-group [(ngModel)]="values.order.shipping_lines[0].method_id" name="shipping_method" ngDefaultControl>
     <ion-list-header mode="md">
       <ion-label>{{"Shipping" | translate}}</ion-label>
     </ion-list-header>
@@ -58,7 +58,7 @@
 
   </ion-radio-group>
 
-  <ion-radio-group [(ngModel)]="values.order.payment_method" name="shipping_method" ngDefaultControl (ngModelChange)="onChangePaymentMethod()">
+  <ion-radio-group [(ngModel)]="values.order.payment_method" name="payment_method" ngDefaultControl (ngModelChange)="onChangePaymentMethod()">
     <ion-list-header mode="md">
       <ion-label>{{"Payment" | translate}}</ion-label>
     </ion-list-header>
@@ -75,11 +75,17 @@
             <!-- Used to display form errors. -->
             <div id="card-errors" class="card-error" role="alert"></div>
           </div>
-      </form>
-    </div>
-    <ion-item mode="md" lines="full" *ngIf="!(item.id === 'wallet' && settings.customer?.wallet?.balance < values.getTotal())">
+        </form>
+      </div>
+    <ion-item mode="md" lines="full" *ngIf="(item.id === 'wallet' && !(settings.customer?.wallet?.balance > values.getTotal()))">
       <ion-label class="ion-text-wrap">
         <span [innerHTML]="item.title"></span><span *ngIf="item.id === 'wallet' && settings.customer?.wallet?.balance" style="padding-left: 16px; padding-right: 16px">{{settings.customer.wallet.balance | currency:values.currency:'symbol':'1.'+values.priceDecimal+'-'+values.priceDecimal}}</span>
+      </ion-label>
+      <ion-radio color="{{values.button.color}}" value="{{item.id}}"></ion-radio>
+    </ion-item>
+    <ion-item mode="md" lines="full" *ngIf="item.id !== 'wallet'">
+      <ion-label class="ion-text-wrap">
+        <span [innerHTML]="item.title"></span>
       </ion-label>
       <ion-radio color="{{values.button.color}}" value="{{item.id}}"></ion-radio>
     </ion-item>

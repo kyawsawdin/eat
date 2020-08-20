@@ -1,16 +1,21 @@
 <ion-header mode="ios">
   <ion-toolbar mode="md">
+    <div *ngIf="settings.settings.location_filter == 1">
+      <ion-chip color="primary" *ngIf="service.userLocation.address" (click)="getLocation()">
+        <ion-label>{{service.userLocation.address}}</ion-label>
+        <ion-icon name="location-outline"></ion-icon>
+      </ion-chip>
+      <ion-chip color="primary" *ngIf="!service.userLocation.address" (click)="getLocation()">
+        <ion-label>{{"Select your address" | translate}}</ion-label>
+        <ion-icon name="location-outline"></ion-icon>
+      </ion-chip>
+    </div>
 
-    <ion-buttons slot="start">
-      <!--ion-icon slot="icon-only" name="location-outline" (click)="getLocation()"></ion-icon-->
-        <!--ion-button>
-        {{userAddress}}
-        </ion-button-->
-    </ion-buttons>
-    <ion-title style="text-align: center;" class="logo-title">
+    <ion-title *ngIf="settings.settings.location_filter == 0" style="text-align: center;" class="logo-title">
        {{"SUPER STORE" | translate}}
       <!--img src="assets/image/logo.png" style="width: 50px;height: auto;"-->
-      </ion-title>
+    </ion-title>
+
     <!--ion-buttons slot="end">
       <ion-button class="total-count-button" routerDirection="forward" [routerLink]="['/cart']">
           <ion-icon slot="icon-only" name="basket-outline"></ion-icon>
@@ -21,6 +26,7 @@
 </ion-header>
 
 <ion-content>
+
     <ion-fab *ngIf="values.getTotalCount() != 0" vertical="bottom" horizontal="end" slot="fixed">
       <ion-fab-button mode="ios" translucent="true" color="{{settings.theme.button}}" (click)="cart()">
         <ion-icon name="basket"></ion-icon>
@@ -28,7 +34,7 @@
       </ion-fab-button>
     </ion-fab>
 
-    <div *ngIf="!blocks?.blocks">
+    <div *ngIf="!blocks?.blocks || loading">
       <app-home-skeleton></app-home-skeleton>
     </div>
 
@@ -44,6 +50,7 @@
         </a>
     </ion-fab-->
 
+    <div *ngIf="blocks.settings && (blocks.recentProducts.length || blocks.categories.length) && (blocks.settings.location_filter == 0 || (blocks.settings.location_filter == 1 && service.userLocation.latitude != 0))">
     <div *ngFor="let children of blocks?.blocks" hideWhen="loading" class="blocks">
 
         <div *ngIf="children.block_type == 'banner_block'" [style.background-color]="children.bg_color == '#FFFFFF' || children.bg_color == '#ffffff' ? 'unset' : children.bg_color" [style.margin]="children.margin" [style.padding]="children.padding" class="banner_block">
@@ -184,7 +191,6 @@
       </ion-list>
     </div>
 
-
     <!-- This is GRID_1 Comment/Uncomment this when you are using this and comment or delete other GRID_X -->
     <!--div class="product-grid1">
       <ion-list *ngIf="blocks.recentProducts && blocks.recentProducts.length">
@@ -225,13 +231,27 @@
       </ion-list>
     </div-->
 
-
-
     <ion-infinite-scroll threshold="100px" (ionInfinite)="doInfinite($event)" *ngIf="has_more_items">
       <ion-infinite-scroll-content
         loadingSpinner="bubbles">
       </ion-infinite-scroll-content>
     </ion-infinite-scroll>
+
+  </div>
+
+    <div class="no-service" *ngIf="blocks.settings && blocks.settings.location_filter == 1">
+      <ion-label *ngIf="blocks.categories && service.userLocation.latitude != 0 && (!blocks.recentProducts.length && !blocks.categories.length)">
+        <ion-icon color="medium" name="location-outline"></ion-icon>
+        <h2>Sorry, Service is not available in your city. we will be there soon!</h2>
+        <ion-button mode="md" color="{{settings.theme.button}}" expand="block" fill="solid" (click)="getLocation()">{{"Address" | translate}}</ion-button>
+      </ion-label>
+
+      <ion-label *ngIf="blocks.settings && service.userLocation.latitude == 0">
+        <ion-icon color="medium" name="location-outline"></ion-icon>
+        <h2>Please choose your address!</h2>
+        <ion-button mode="md" color="{{settings.theme.button}}" expand="block" fill="solid" (click)="getLocation()">{{"Address" | translate}}</ion-button>
+      </ion-label>
+    </div>
 
 
 </ion-content>
